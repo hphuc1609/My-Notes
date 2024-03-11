@@ -1,0 +1,10 @@
+{
+  "notes": [
+    {
+      "title": "Test Note",
+      "decription": "First Note",
+      "category": "todo",
+      "id": 1
+    }
+  ]
+}
