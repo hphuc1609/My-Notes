@@ -164,7 +164,10 @@ function Layout({ children }) {
    */
   const handleListItemClick = (path) => {
     navigate(path);
-    setOpenDrawer(false);
+
+    if (mobileScreen) {
+      setOpenDrawer(false);
+    }
   };
 
   const handleOpenMenu = (event) => {
