@@ -25,7 +25,8 @@ const resources = {
       work: "Work",
       todo: "Todo",
       reminder: "Reminder",
-      formNoteBtn: "Create"
+      formNoteBtn: "Create",
+      allRightsReserved: "All rights reserved."
     }
   },
   vi: {
@@ -54,7 +55,8 @@ const resources = {
       work: "Công việc",
       todo: "Việc cần làm",
       reminder: "Nhắc nhở",
-      formNoteBtn: "Tạo mới"
+      formNoteBtn: "Tạo mới",
+      allRightsReserved: "Đã đăng ký bản quyền."
     }
   }
 };

@@ -19,6 +19,7 @@ import {
   useMediaQuery
 } from "@material-ui/core";
 import { KeyboardArrowDown, Language, MenuOpen } from "@material-ui/icons";
+import Footer from "containers/Footer";
 import { theme } from "createTheme";
 import { format } from "date-fns";
 import languages from "models/languages";
@@ -300,32 +301,41 @@ function Layout({ children }) {
           </IconButton>
         </Box>
         <Divider />
-        <List disablePadding>
-          {menuNavItems.map((menuItem) => (
-            <Tooltip
-              key={menuItem.text}
-              title={!isOpenDrawer ? getTranslatedText(menuItem.text) : ""}
-              placement='right'
-              arrow
-            >
-              <ListItem
-                button
-                onClick={() => handleListItemClick(menuItem.path)}
-                className={classes.listItem}
-                selected={location.pathname === menuItem.path}
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          justifyContent={"space-between"}
+          height={"100%"}
+          paddingBottom={2}
+        >
+          <List disablePadding>
+            {menuNavItems.map((menuItem) => (
+              <Tooltip
+                key={menuItem.text}
+                title={!isOpenDrawer ? getTranslatedText(menuItem.text) : ""}
+                placement='right'
+                arrow
               >
-                <ListItemIcon className={classes.listItemIcon}>
-                  {menuItem.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primaryTypographyProps={{ className: "text-overflow" }}
-                  primary={getTranslatedText(menuItem.text)}
-                  className={classes.listItemText}
-                />
-              </ListItem>
-            </Tooltip>
-          ))}
-        </List>
+                <ListItem
+                  button
+                  onClick={() => handleListItemClick(menuItem.path)}
+                  className={classes.listItem}
+                  selected={location.pathname === menuItem.path}
+                >
+                  <ListItemIcon className={classes.listItemIcon}>
+                    {menuItem.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primaryTypographyProps={{ className: "text-overflow" }}
+                    primary={getTranslatedText(menuItem.text)}
+                    className={classes.listItemText}
+                  />
+                </ListItem>
+              </Tooltip>
+            ))}
+          </List>
+          <Footer isOpenDrawer={isOpenDrawer} />
+        </Box>
       </Drawer>
 
       {/* Content */}
