@@ -54,7 +54,7 @@ function NoteCard({ note, handleDeleteNote }) {
           className: "text-overflow"
         }}
         title={note.title}
-        subheader={`${t(note.category.toLowerCase())}`}
+        subheader={`${t(note.category?.toLowerCase())}`}
         action={
           <IconButton
             className={classes.icon}
@@ -64,8 +64,8 @@ function NoteCard({ note, handleDeleteNote }) {
           </IconButton>
         }
         avatar={
-          <Avatar variant='h5' className={classes.avatar}>
-            {note.category[0]?.toUpperCase()}
+          <Avatar variant='circular' className={classes.avatar}>
+            {note.category && note.category[0]?.toUpperCase()}
           </Avatar>
         }
       />

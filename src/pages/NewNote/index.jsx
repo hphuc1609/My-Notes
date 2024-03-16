@@ -1,7 +1,7 @@
 import { Paper } from "@material-ui/core";
-import postNote from "API/New";
+import { firestoreDB } from "configs/firebase";
 import FormNoteDetail from "containers/Layout/subs-container/FormNoteDetail";
-import isSuccessResponse from "helpers/isSuccessResponse";
+import { addDoc, collection } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -24,23 +24,7 @@ function NewDetailNote() {
   const [errors, setErrors] = useState(defaultErrors);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const sendDataToServer = async (data) => {
-    try {
-      const response = await postNote(data);
-      const { status } = response;
-
-      if (isSuccessResponse(response)) {
-        toast.success(`Created note successfully.`);
-        navigate("/management");
-      } else {
-        toast.error(`Failed to create note. Server returned: ${status}`);
-      }
-    } catch (error) {
-      toast.error(`Error: ${error.message}`);
-    }
-  };
-
-  const handleSubmit = async (event) => {
+  const handleCreateNote = async (event) => {
     try {
       event.preventDefault();
       setFormSubmitted(true);
@@ -50,7 +34,12 @@ function NewDetailNote() {
         return;
       }
 
-      await sendDataToServer(values);
+      const noteId = Math.floor(Math.random() * 10000);
+      const notesCollect = collection(firestoreDB, "notes");
+
+      await addDoc(notesCollect, { id: noteId, title, decription, category });
+      toast.success(`Note "${title}" created successfully`);
+      navigate("/management");
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
@@ -75,7 +64,7 @@ function NewDetailNote() {
         values={values}
         errors={errors}
         setValues={setValues}
-        handleSubmit={handleSubmit}
+        handleSubmit={handleCreateNote}
       />
     </Paper>
   );

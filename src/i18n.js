@@ -6,7 +6,7 @@ i18n.use(initReactI18next).init({
   resources: resources,
   lng: "en",
   fallbackLng: "en",
-  debug: true,
+  // debug: true,
   interpolation: {
     escapeValue: false
   },

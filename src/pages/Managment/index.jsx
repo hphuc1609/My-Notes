@@ -1,26 +1,25 @@
 import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
-import { deleteById, getListNote } from "API/Detail";
 import TryAgain from "common/TryAgain";
 import NoteCard from "containers/Layout/subs-container/NoteCard";
-import isSuccessResponse from "helpers/isSuccessResponse";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import { deleteNoteById, getNotes } from "services/notes";
 
 function NoteManagment() {
-  const [notes, setNotes] = useState({ data: [], requesting: "loading" });
   const { t } = useTranslation();
+
+  /** @type {{data: NoteType[], requesting: "loading" | "success" | "fail"}} */
+  const initialNotes = { data: [], requesting: "loading" };
+
+  const [notes, setNotes] = useState(initialNotes);
 
   const getAllNotes = async () => {
     try {
-      const response = await getListNote();
-      const { data, status } = response;
-
-      if (isSuccessResponse(response)) {
-        setNotes({ data, requesting: "success" });
-      } else {
-        setNotes({ ...notes, requesting: "fail" });
-        toast.error(`Failed to get notes. Server returned: ${status}`);
+      setNotes(initialNotes);
+      const response = await getNotes();
+      if (response) {
+        setNotes({ data: response, requesting: "success" });
       }
     } catch (error) {
       setNotes({ ...notes, requesting: "fail" });
@@ -30,7 +29,6 @@ function NoteManagment() {
     }
   };
 
-  // Get all notes
   useEffect(() => {
     getAllNotes();
   }, []);
@@ -38,23 +36,15 @@ function NoteManagment() {
   /**
    * Asynchronously handles the deletion of a note.
    *
-   * @param {number} noteId - The ID of the note to be deleted
+   * @param {number|string} noteId - The ID of the note to be deleted
    * @param {string} title - The title of the note
    * @return {void}
    */
   const handleDeleteNote = async (noteId, title) => {
     try {
-      const response = await deleteById(noteId);
-      const { status } = response;
-
-      if (isSuccessResponse(response)) {
-        getAllNotes();
-        toast.success(`Deleted ${title} successfully.`);
-      } else {
-        toast.error(
-          `Failed to delete note ${title}. Server returned: ${status}`
-        );
-      }
+      await deleteNoteById(noteId);
+      await getAllNotes();
+      toast.success(`Note "${title}" deleted successfully`);
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
